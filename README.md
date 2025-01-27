@@ -3,7 +3,7 @@ This project is an ASP.NET Core Web API designed to manage blog posts and their 
 
 No need to worry about the database setup. If no database is configured in the appsettings, the application will automatically fall back to an in-memory database.
 
-If I had more than: 
+If I had more time: 
 AutoMapper,
 CI/CD configs.
 Enviroments configs.
