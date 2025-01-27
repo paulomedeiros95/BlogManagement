@@ -11,7 +11,7 @@ namespace BlogManagementInfra.Data
         {
             using var scope = serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
 
             try
             {
@@ -23,6 +23,8 @@ namespace BlogManagementInfra.Data
                 logger.LogError(ex, "Error applying migrations.");
                 throw new Exception(ex.Message);
             }
+
+
         }
     }
 }
