@@ -1,5 +1,8 @@
-﻿using BlogManagementAPI.Controllers.Base;
+﻿using AutoMapper;
+using BlogManagementAPI.Controllers.Base;
 using BlogManagementDomain.Domain;
+using BlogManagementDomain.Dto.Request;
+using BlogManagementDomain.Dto.Response;
 using BlogManagementService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,13 +14,17 @@ namespace BlogManagementAPI.Controllers
     {
         #region Fields
         private readonly IBlogPostService _blogPostService;
+        private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public BlogPostsController(IBlogPostService blogPostService, ILogger<BlogPostsController> logger)
+        public BlogPostsController(
+                IBlogPostService blogPostService, 
+                ILogger<BlogPostsController> logger, IMapper mapper)
                 : base(logger)
         {
             _blogPostService = blogPostService;
+            _mapper = mapper;
         }
         #endregion
 
@@ -29,7 +36,9 @@ namespace BlogManagementAPI.Controllers
             {
                 _logger.LogInformation("Fetching all blog posts.");
                 var posts = await _blogPostService.GetAllPostsAsync();
-                return Ok(posts.Select(p => new { p.Id, p.Title, CommentsCount = p.Comments.Count }));
+
+                var response = _mapper.Map<IEnumerable<BlogPostResponseDTO>>(posts);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -38,16 +47,22 @@ namespace BlogManagementAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] BlogPostDomain post)
+        public async Task<IActionResult> Create([FromBody] BlogPostRequestDTO dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                _logger.LogInformation("Creating a new blog post: {Title}", post.Title);
+                _logger.LogInformation("Creating a new blog post: {Title}", dto.Title);
+
+                var post = _mapper.Map<BlogPostDomain>(dto);
+
                 await _blogPostService.AddPostAsync(post);
-                return CreatedAtAction(nameof(GetById), new { id = post.Id }, post);
+
+                var response = _mapper.Map<BlogPostResponseDTO>(post);
+
+                return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
             catch (Exception ex)
             {
@@ -68,13 +83,10 @@ namespace BlogManagementAPI.Controllers
                     return NotFound();
                 }
 
-                return Ok(new
-                {
-                    post.Id,
-                    post.Title,
-                    post.Content,
-                    Comments = post.Comments.Select(c => new { c.Id, c.Content })
-                });
+                // Mapear a entidade de domínio para DTO de resposta
+                var response = _mapper.Map<BlogPostResponseDTO>(post);
+
+                return Ok(response);
             }
             catch (Exception ex)
             {

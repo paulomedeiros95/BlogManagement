@@ -1,13 +1,13 @@
-using BlogManagementInfra.BbContext;
+using BlogManagementDomain.MappingProfiles;
 using BlogManagementInfra.Data;
 using BlogManagementInfra.DependencyInjection;
 using BlogManagementService.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 #region Configure DataBase
 builder.Services.ConfigureDbContext(builder.Configuration);
