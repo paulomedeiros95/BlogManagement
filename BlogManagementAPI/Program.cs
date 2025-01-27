@@ -1,25 +1,21 @@
 using BlogManagementInfra.BbContext;
-using BlogManagementInfra.Repository.Base;
-using BlogManagementInfra.Repository.Interface.Base;
-using BlogManagementInfra.Repository.Interface;
+using BlogManagementInfra.DependencyInjection;
+using BlogManagementService.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using BlogManagementInfra.Repository;
 
-#region Services DI
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-#region Repositories
-
-builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
-builder.Services.AddScoped<ICommentRepository, CommentRepository>();
-
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+#region Repositories DI
+builder.Services.AddRepositories();
 #endregion
 
+#region Services DI
+builder.Services.AddServices();
 #endregion
 
 #region App Builder

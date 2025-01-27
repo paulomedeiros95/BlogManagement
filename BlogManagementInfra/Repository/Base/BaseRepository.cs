@@ -1,4 +1,5 @@
-﻿using BlogManagementInfra.Repository.Interface.Base;
+﻿using BlogManagementInfra.BbContext;
+using BlogManagementInfra.Repository.Interface.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogManagementInfra.Repository.Base
@@ -6,13 +7,13 @@ namespace BlogManagementInfra.Repository.Base
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         #region Fields
-        protected readonly DbContext _context;
+        protected readonly ApplicationDbContext _context;
         protected readonly DbSet<T> _dbSet;
         #endregion
 
         #region Constructor
 
-        public BaseRepository(DbContext context)
+        public BaseRepository(ApplicationDbContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();
