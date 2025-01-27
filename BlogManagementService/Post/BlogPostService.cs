@@ -26,7 +26,7 @@ namespace BlogManagementService.Post
             try
             {
                 _logger.LogInformation("Fetching all blog posts from the repository.");
-                return await _repository.GetAllAsync();
+                return await _repository.GetAllAsync(x => x.DeletedAt != null, "Comments");
             }
             catch (Exception ex)
             {
@@ -40,7 +40,8 @@ namespace BlogManagementService.Post
             try
             {
                 _logger.LogInformation("Fetching blog post with ID: {Id}", id);
-                return await _repository.FindByIdAsync(id);
+                var result = await _repository.FindByIdAsync(x => x.Id == id, "Comments");
+                return result;
             }
             catch (Exception ex)
             {

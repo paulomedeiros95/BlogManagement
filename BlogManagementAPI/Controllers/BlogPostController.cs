@@ -36,8 +36,14 @@ namespace BlogManagementAPI.Controllers
             {
                 _logger.LogInformation("Fetching all blog posts.");
                 var posts = await _blogPostService.GetAllPostsAsync();
+                                
+                var response = posts.Select(p => new
+                {
+                    p.Id,
+                    p.Title,
+                    CommentsCount = p.Comments.Count
+                });
 
-                var response = _mapper.Map<IEnumerable<BlogPostResponseDTO>>(posts);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -60,9 +66,7 @@ namespace BlogManagementAPI.Controllers
 
                 await _blogPostService.AddPostAsync(post);
 
-                var response = _mapper.Map<BlogPostResponseDTO>(post);
-
-                return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
+                return CreatedAtAction(nameof(GetById), new { id = post.Id }, post);
             }
             catch (Exception ex)
             {
@@ -77,14 +81,20 @@ namespace BlogManagementAPI.Controllers
             {
                 _logger.LogInformation("Fetching blog post with ID: {Id}", id);
                 var post = await _blogPostService.GetPostByIdAsync(id);
+
                 if (post == null)
                 {
                     _logger.LogWarning("Blog post with ID {Id} not found.", id);
                     return NotFound();
                 }
 
-                // Mapear a entidade de domínio para DTO de resposta
-                var response = _mapper.Map<BlogPostResponseDTO>(post);
+                var response = new
+                {
+                    post.Id,
+                    post.Title,
+                    post.Content,
+                    Comments = post.Comments.Select(c => new { c.Id, c.Content })
+                };
 
                 return Ok(response);
             }

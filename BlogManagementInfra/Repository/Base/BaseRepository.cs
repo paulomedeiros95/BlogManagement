@@ -22,23 +22,33 @@ namespace BlogManagementInfra.Repository.Base
 
         #endregion
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> whereByExpression, params string[] relations)
         {
-            return await _dbSet.ToListAsync();
+            var query = _context.Set<T>().AsQueryable();
+
+            AddIncludes(relations, ref query);
+
+            return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> filter = null)
+        private static void AddIncludes(string[] relations, ref IQueryable<T> query)
         {
-            if (filter != null)
+            if (relations == null || !relations.Any())
+                return;
+
+            foreach (var relation in relations)
             {
-                return await _dbSet.Where(filter).ToListAsync();
+                query = query.Include(relation);
             }
-            return await _dbSet.ToListAsync();
         }
 
-        public async Task<T> FindByIdAsync(int id)
+        public async Task<T> FindByIdAsync(Expression<Func<T, bool>> whereByExpression, params string[] relations)
         {
-            return await _dbSet.FindAsync(id);
+            var query = _context.Set<T>().AsQueryable();
+
+            AddIncludes(relations, ref query);
+
+            return await query.FirstOrDefaultAsync(whereByExpression);
         }
 
         public async Task AddAsync(T entity)

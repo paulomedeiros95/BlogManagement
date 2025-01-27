@@ -4,10 +4,8 @@ namespace BlogManagementInfra.Repository.Interface.Base
 {
     public interface IBaseRepository<T> where T : class
     {
-        Task<IEnumerable<T>> GetAllAsync();
-        Task<T> FindByIdAsync(int id);
+        Task<List<T>> GetAllAsync(Expression<Func<T, bool>> whereByExpression, params string[] relations);
+        Task<T> FindByIdAsync(Expression<Func<T, bool>> filter = null, params string[] relations);
         Task AddAsync(T entity);
-
-        Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> filter = null);
     }
 }
