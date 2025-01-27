@@ -17,6 +17,8 @@ namespace BlogManagementDomain.MappingProfiles
             CreateMap<BlogPostRequestDTO, BlogPostDomain>().ReverseMap();
 
             CreateMap<CommentDomain, CommentResponseDTO>().ReverseMap();
+       
+            CreateMap<CommentRequestDTO, CommentDomain>().ReverseMap();
         }
     }
 }
