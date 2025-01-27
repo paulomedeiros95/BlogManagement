@@ -1,11 +1,10 @@
 ﻿using BlogManagementDomain.Base;
 using BlogManagementDomain.Blog;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace BlogManagementDomain.Domain
 {
-    public class BlogDomain : BaseDomain
+    public class BlogPostDomain : BaseDomain
     {
         #region Properties
 
