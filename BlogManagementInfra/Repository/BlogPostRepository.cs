@@ -2,7 +2,6 @@
 using BlogManagementInfra.BbContext;
 using BlogManagementInfra.Repository.Base;
 using BlogManagementInfra.Repository.Interface;
-using Microsoft.EntityFrameworkCore;
 
 namespace BlogManagementInfra.Repository
 {
@@ -10,11 +9,6 @@ namespace BlogManagementInfra.Repository
     {
         public BlogPostRepository(ApplicationDbContext context) : base(context)
         {
-        }
-
-        public async Task<IEnumerable<BlogPostDomain>> GetPostsWithCommentsAsync()
-        {
-            return await _dbSet.Include(p => p.Comments).ToListAsync();
         }
     }
 }

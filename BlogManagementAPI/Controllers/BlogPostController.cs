@@ -2,7 +2,6 @@
 using BlogManagementAPI.Controllers.Base;
 using BlogManagementDomain.Domain;
 using BlogManagementDomain.Dto.Request;
-using BlogManagementDomain.Dto.Response;
 using BlogManagementService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
