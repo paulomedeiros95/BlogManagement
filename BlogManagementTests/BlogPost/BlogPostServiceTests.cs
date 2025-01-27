@@ -31,14 +31,14 @@ namespace BlogManagementTests.BlogPost
         [Test]
         public async Task GetAllPostsAsync_ShouldReturnAllPosts()
         {
-            // Arrange
+            // Arrange: Mocking the repository result
             var posts = new List<BlogPostDomain>
             {
                 new BlogPostDomain { Id = 1, Title = "Post 1", Content = "Content 1" },
                 new BlogPostDomain { Id = 2, Title = "Post 2", Content = "Content 2" }
             };
 
-            _repository.GetAllAsync().Returns(posts);
+            _repository.GetAllAsync().Returns(posts); // Simula a resposta do repositório
 
             // Act
             var result = await _blogPostService.GetAllPostsAsync();
@@ -52,10 +52,10 @@ namespace BlogManagementTests.BlogPost
         [Test]
         public async Task GetPostByIdAsync_ShouldReturnCorrectPost()
         {
-            // Arrange
+            // Arrange: Mocking the repository result
             var post = new BlogPostDomain { Id = 1, Title = "Post 1", Content = "Content 1" };
 
-            _repository.FindByIdAsync(1).Returns(post);
+            _repository.FindByIdAsync(1).Returns(post); // Simula a resposta do repositório
 
             // Act
             var result = await _blogPostService.GetPostByIdAsync(1);
@@ -69,7 +69,7 @@ namespace BlogManagementTests.BlogPost
         [Test]
         public async Task GetPostByIdAsync_WhenPostDoesNotExist_ShouldReturnNull()
         {
-            // Arrange
+            // Arrange: Simulando um ID inexistente
             _repository.FindByIdAsync(99).Returns((BlogPostDomain)null);
 
             // Act
@@ -83,7 +83,7 @@ namespace BlogManagementTests.BlogPost
         [Test]
         public void GetPostByIdAsync_WhenRepositoryThrowsException_LogsErrorAndRethrows()
         {
-            // Arrange
+            // Arrange: Simulando uma exceção
             var exceptionMessage = "Repository failure";
             _repository.FindByIdAsync(1).Throws(new System.Exception(exceptionMessage));
 
@@ -96,7 +96,7 @@ namespace BlogManagementTests.BlogPost
         [Test]
         public async Task AddPostAsync_ShouldCallRepositoryAdd()
         {
-            // Arrange
+            // Arrange: Mocking a new post
             var newPost = new BlogPostDomain { Title = "New Post", Content = "New Content" };
 
             // Act
@@ -110,7 +110,7 @@ namespace BlogManagementTests.BlogPost
         [Test]
         public void AddPostAsync_WhenRepositoryThrowsException_LogsErrorAndRethrows()
         {
-            // Arrange
+            // Arrange: Simulando uma exceção no repositório
             var newPost = new BlogPostDomain { Title = "New Post", Content = "New Content" };
             _repository.When(x => x.AddAsync(newPost))
                        .Throw(new System.Exception("Repository failure"));
