@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="Comment\" />
+    <Folder Include="Authentication\" />
+    <Folder Include="Post\" />
+  </ItemGroup>
+
 </Project>
