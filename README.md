@@ -7,6 +7,8 @@ If I had more time:
 - AutoMapper.
 - CI/CD configs.
 - Enviroments configs.
+- Observability.
+- Healthcheck improvemtns.
 
 Technologies Used: 
 - .NET 8.
