@@ -9,6 +9,9 @@ If I had more time:
 - Enviroments configs.
 - Observability.
 - Healthcheck improvemtns.
+- Authentication
+- Entiry CRUD actions.
+- New features like "Forum".
 
 Technologies Used: 
 - .NET 8.
