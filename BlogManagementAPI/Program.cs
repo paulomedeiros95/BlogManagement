@@ -3,6 +3,7 @@ using BlogManagementInfra.Repository.Base;
 using BlogManagementInfra.Repository.Interface.Base;
 using BlogManagementInfra.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
+using BlogManagementInfra.Repository;
 
 #region Services DI
 var builder = WebApplication.CreateBuilder(args);
