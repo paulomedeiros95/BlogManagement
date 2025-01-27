@@ -35,7 +35,7 @@ namespace BlogManagementService.Comment
             try
             {
                 _logger.LogInformation("Fetching comments for post with ID: {PostId}", postId);
-                var comments = await _repository.FindAllAsync(x => x.BlogPostId == postId);
+                var comments = await _repository.GetAllAsync(x => x.BlogPostId == postId);
                 _logger.LogInformation("Successfully fetched {Count} comments for post with ID: {PostId}");
                 return comments;
             }

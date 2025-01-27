@@ -31,14 +31,13 @@ namespace BlogManagementTests.BlogPost
         [Test]
         public async Task GetAllPostsAsync_ShouldReturnAllPosts()
         {
-            // Arrange: Mocking the repository result
             var posts = new List<BlogPostDomain>
             {
                 new BlogPostDomain { Id = 1, Title = "Post 1", Content = "Content 1" },
                 new BlogPostDomain { Id = 2, Title = "Post 2", Content = "Content 2" }
             };
 
-            _repository.GetAllAsync().Returns(posts); // Simula a resposta do repositório
+            _repository.GetAllAsync(null,"Comments").Returns(posts); 
 
             // Act
             var result = await _blogPostService.GetAllPostsAsync();
@@ -52,10 +51,9 @@ namespace BlogManagementTests.BlogPost
         [Test]
         public async Task GetPostByIdAsync_ShouldReturnCorrectPost()
         {
-            // Arrange: Mocking the repository result
             var post = new BlogPostDomain { Id = 1, Title = "Post 1", Content = "Content 1" };
 
-            _repository.FindByIdAsync(1).Returns(post); // Simula a resposta do repositório
+            _repository.FindByIdAsync(x => x.Id == 1).Returns(post); 
 
             // Act
             var result = await _blogPostService.GetPostByIdAsync(1);
@@ -69,8 +67,7 @@ namespace BlogManagementTests.BlogPost
         [Test]
         public async Task GetPostByIdAsync_WhenPostDoesNotExist_ShouldReturnNull()
         {
-            // Arrange: Simulando um ID inexistente
-            _repository.FindByIdAsync(99).Returns((BlogPostDomain)null);
+            _repository.FindByIdAsync(x=> x.Id == 99).Returns((BlogPostDomain)null);
 
             // Act
             var result = await _blogPostService.GetPostByIdAsync(99);
@@ -83,9 +80,8 @@ namespace BlogManagementTests.BlogPost
         [Test]
         public void GetPostByIdAsync_WhenRepositoryThrowsException_LogsErrorAndRethrows()
         {
-            // Arrange: Simulando uma exceção
             var exceptionMessage = "Repository failure";
-            _repository.FindByIdAsync(1).Throws(new System.Exception(exceptionMessage));
+            _repository.FindByIdAsync(x => x.Id == 1).Throws(new System.Exception(exceptionMessage));
 
             // Act & Assert
             var exception = Assert.ThrowsAsync<System.Exception>(() => _blogPostService.GetPostByIdAsync(1));
@@ -96,7 +92,6 @@ namespace BlogManagementTests.BlogPost
         [Test]
         public async Task AddPostAsync_ShouldCallRepositoryAdd()
         {
-            // Arrange: Mocking a new post
             var newPost = new BlogPostDomain { Title = "New Post", Content = "New Content" };
 
             // Act
@@ -110,7 +105,6 @@ namespace BlogManagementTests.BlogPost
         [Test]
         public void AddPostAsync_WhenRepositoryThrowsException_LogsErrorAndRethrows()
         {
-            // Arrange: Simulando uma exceção no repositório
             var newPost = new BlogPostDomain { Title = "New Post", Content = "New Content" };
             _repository.When(x => x.AddAsync(newPost))
                        .Throw(new System.Exception("Repository failure"));

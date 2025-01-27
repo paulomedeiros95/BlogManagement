@@ -74,7 +74,7 @@ namespace BlogManagementTests.Comments
                 new CommentDomain { Id = 2, Content = "Comment 2", BlogPostId = postId }
             };
 
-            _repository.FindAllAsync(x => x.BlogPostId == postId).Returns(comments);
+            _repository.GetAllAsync(x => x.BlogPostId == postId, "Comments").Returns(comments);
 
             // Act
             var result = await _commentService.GetCommentsByPostIdAsync(postId);
@@ -91,7 +91,7 @@ namespace BlogManagementTests.Comments
         {
             // Arrange
             var postId = 99;
-            _repository.FindAllAsync(x => x.BlogPostId == postId).Returns(new List<CommentDomain>());
+            _repository.GetAllAsync(x => x.BlogPostId == postId, "Comments").Returns(new List<CommentDomain>());
 
             // Act
             var result = await _commentService.GetCommentsByPostIdAsync(postId);
@@ -107,7 +107,7 @@ namespace BlogManagementTests.Comments
         {
             // Arrange
             var postId = 10;
-            _repository.When(x => x.FindAllAsync(x => x.BlogPostId == postId))
+            _repository.When(x => x.GetAllAsync(x => x.BlogPostId == postId, "Comments"))
                        .Throw(new System.Exception("Repository failure"));
 
             // Act & Assert
