@@ -1,25 +1,37 @@
+using BlogManagementDomain.MappingProfiles;
+using BlogManagementInfra.Data;
+using BlogManagementInfra.DependencyInjection;
+using BlogManagementService.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+#region Configure DataBase
+builder.Services.ConfigureDbContext(builder.Configuration);
+#endregion
+
+#region Repositories DI
+builder.Services.AddRepositories();
+#endregion
+
+#region Services DI
+builder.Services.AddServices();
+#endregion
+
+#region App Builder
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseRouting();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
+#endregion
