@@ -11,6 +11,7 @@ If I had more time:
 - Healthcheck improvemtns.
 - Authentication
 - Entiry CRUD actions.
+- Better pagination.
 - New features like "Forum".
 
 Technologies Used: 
