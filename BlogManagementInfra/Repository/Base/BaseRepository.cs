@@ -1,6 +1,7 @@
 ﻿using BlogManagementInfra.BbContext;
 using BlogManagementInfra.Repository.Interface.Base;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BlogManagementInfra.Repository.Base
 {
@@ -26,7 +27,16 @@ namespace BlogManagementInfra.Repository.Base
             return await _dbSet.ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> filter = null)
+        {
+            if (filter != null)
+            {
+                return await _dbSet.Where(filter).ToListAsync();
+            }
+            return await _dbSet.ToListAsync();
+        }
+
+        public async Task<T> FindByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
         }

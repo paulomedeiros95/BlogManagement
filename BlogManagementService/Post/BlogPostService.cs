@@ -1,23 +1,67 @@
 ﻿using BlogManagementDomain.Domain;
+using BlogManagementInfra.Repository.Interface;
 using BlogManagementService.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace BlogManagementService.Post
 {
     public class BlogPostService : IBlogPostService
     {
-        public Task AddPostAsync(BlogPostDomain blogPost)
+        #region Fields
+        private readonly IBlogPostRepository _repository;
+        private readonly ILogger<BlogPostService> _logger;
+        #endregion
+
+        #region Constructor
+
+        public BlogPostService(IBlogPostRepository repository, ILogger<BlogPostService> logger)
         {
-            throw new NotImplementedException();
+            _repository = repository;
+            _logger = logger;
+        }
+        #endregion
+
+        public async Task<IEnumerable<BlogPostDomain>> GetAllPostsAsync()
+        {
+            try
+            {
+                _logger.LogInformation("Fetching all blog posts from the repository.");
+                return await _repository.GetAllAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while fetching all blog posts.");
+                throw;
+            }
         }
 
-        public Task<IEnumerable<BlogPostDomain>> GetAllPostsAsync()
+        public async Task<BlogPostDomain> GetPostByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation("Fetching blog post with ID: {Id}", id);
+                return await _repository.FindByIdAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while fetching blog post with ID: {Id}", id);
+                throw;
+            }
         }
 
-        public Task<BlogPostDomain> GetPostByIdAsync(int id)
+        public async Task AddPostAsync(BlogPostDomain blogPost)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation("Adding a new blog post: {Title}", blogPost.Title);
+                await _repository.AddAsync(blogPost);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while adding a new blog post: {Title}", blogPost.Title);
+                throw;
+            }
         }
     }
 }
+
